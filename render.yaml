@@ -1,0 +1,19 @@
+# Render Blueprint: Dashboard > New > Blueprint > pick this repo.
+services:
+  - type: web
+    name: fitscan
+    runtime: docker
+    plan: free            # free = database resets on every restart/redeploy. See DEPLOY.md to keep data (paid disk).
+    healthCheckPath: /api/health
+    envVars:
+      - key: FITSCAN_ADMIN_KEY
+        generateValue: true     # copy the generated value from the Render dashboard, it is your admin password
+      - key: FITSCAN_DEMO_OTP
+        value: "1"              # 1 = login code shown on screen (demo). Set 0 only after SMTP is configured.
+      - key: PORT
+        value: "8000"
+    # --- To keep data between restarts (paid plans only), delete "plan: free" above, set plan: starter and add: ---
+    # disk:
+    #   name: fitscan-data
+    #   mountPath: /app/backend/data
+    #   sizeGB: 1
